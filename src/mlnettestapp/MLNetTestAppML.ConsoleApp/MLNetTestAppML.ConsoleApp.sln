@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetTestAppML.ConsoleApp", "MLNetTestAppML.ConsoleApp.csproj", "{FB87B6B6-9FC2-4577-9CAA-41E5265441CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetTestAppML.Model", "..\MLNetTestAppML.Model\MLNetTestAppML.Model.csproj", "{580DF5CE-F37E-45B5-94ED-B8B979DC10AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB87B6B6-9FC2-4577-9CAA-41E5265441CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB87B6B6-9FC2-4577-9CAA-41E5265441CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB87B6B6-9FC2-4577-9CAA-41E5265441CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB87B6B6-9FC2-4577-9CAA-41E5265441CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{580DF5CE-F37E-45B5-94ED-B8B979DC10AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{580DF5CE-F37E-45B5-94ED-B8B979DC10AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{580DF5CE-F37E-45B5-94ED-B8B979DC10AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{580DF5CE-F37E-45B5-94ED-B8B979DC10AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {776E0036-2897-4406-AE03-207509978A5E}
+	EndGlobalSection
+EndGlobal
