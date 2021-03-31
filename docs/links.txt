@@ -1,0 +1,5 @@
+
+machinelearning/ImageClassificationDefault.cs at main · dotnet/machinelearning · GitHub 
+https://github.com/dotnet/machinelearning/blob/main/docs/samples/Microsoft.ML.Samples/Dynamic/Trainers/MulticlassClassification/ImageClassification/ImageClassificationDefault.cs
+
+
