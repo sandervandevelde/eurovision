@@ -26,12 +26,15 @@ namespace MLNetTestAppML.Model
 
         public static PredictionEngine<ModelInput, ModelOutput> CreatePredictionEngine()
         {
+            Console.WriteLine("START PREDICTION engine.....");
             // Create new MLContext
             MLContext mlContext = new MLContext();
 
             // Load model & create prediction engine
             ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var modelInputSchema);
             var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
+
+            Console.WriteLine("PREDICTION engine loaded.....");
 
             return predEngine;
         }
