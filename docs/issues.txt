@@ -1,1 +1,8 @@
-aa
+issue:
+https://github.com/dotnet/machinelearning-modelbuilder/issues/1349
+
+request:
+https://github.com/dotnet/machinelearning-modelbuilder/issues/1350
+
+endorsed:
+https://github.com/dotnet/machinelearning-modelbuilder/issues/635
