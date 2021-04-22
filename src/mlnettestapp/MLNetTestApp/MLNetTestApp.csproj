@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MLNetTestAppML.Model\MLNetTestAppML.Model.csproj">
-      <Project>{2DD2592A-A905-4F2C-9A63-B5343F698018}</Project>
-      <Name>MLNetTestAppML.Model</Name>
+    <ProjectReference Include="..\MLNetTestAppML.ConsoleApp\MLNetTestAppML.ConsoleApp.csproj">
+      <Project>{e548c34a-11c9-4d16-81dc-fab9ed75ce3d}</Project>
+      <Name>MLNetTestAppML.ConsoleApp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
