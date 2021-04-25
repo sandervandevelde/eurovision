@@ -383,7 +383,7 @@ namespace TriggeredImageTakerApp
 
             // ALTERNATIVE - START
 
-            int size = evtimage.ImageBase.Length;
+            int size = 1228800;// evtimage.ImageBase.Length;
             byte[] byBuffer = new byte[size];
 
             try
