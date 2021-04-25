@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiTriggeredDoLightApp", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvantechIcamImageTakeExampleApp", "AdvantechIcamImageTakeExampleApp\AdvantechIcamImageTakeExampleApp.csproj", "{AB6EDFBE-7C7D-4254-B248-B873C762165C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggeredImageTakerApp", "TriggeredImageTakerApp\TriggeredImageTakerApp.csproj", "{53702DD7-1878-4CDF-89AE-605AC117F366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriggeredImageTakerApp", "TriggeredImageTakerApp\TriggeredImageTakerApp.csproj", "{53702DD7-1878-4CDF-89AE-605AC117F366}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggeredImagerNetFrwrkApp", "TriggeredImagerNetFrwrkApp\TriggeredImagerNetFrwrkApp.csproj", "{82674699-F348-45DC-846E-7070946FAC9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +37,20 @@ Global
 		{AB6EDFBE-7C7D-4254-B248-B873C762165C}.Release|x64.Build.0 = Release|x64
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|x64.Build.0 = Debug|Any CPU
+		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|x64.ActiveCfg = Debug|x64
+		{53702DD7-1878-4CDF-89AE-605AC117F366}.Debug|x64.Build.0 = Debug|x64
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Release|Any CPU.Build.0 = Release|Any CPU
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Release|x64.ActiveCfg = Release|Any CPU
 		{53702DD7-1878-4CDF-89AE-605AC117F366}.Release|x64.Build.0 = Release|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Debug|x64.ActiveCfg = Debug|x64
+		{82674699-F348-45DC-846E-7070946FAC9C}.Debug|x64.Build.0 = Debug|x64
+		{82674699-F348-45DC-846E-7070946FAC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Release|x64.ActiveCfg = Release|Any CPU
+		{82674699-F348-45DC-846E-7070946FAC9C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
