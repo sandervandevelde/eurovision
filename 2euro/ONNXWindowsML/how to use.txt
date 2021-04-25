@@ -1,6 +1,0 @@
-
-https://go.microsoft.com/fwlink/?linkid=870520
-
-
-sample code
-https://go.microsoft.com/fwlink/?linkid=2023180

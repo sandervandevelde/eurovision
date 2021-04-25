@@ -1,7 +1,0 @@
-https://go.microsoft.com/fwlink/?linkid=861580
-
-
-https://devblogs.microsoft.com/cesardelatorre/run-with-ml-net-c-code-a-tensorflow-model-exported-from-azure-cognitive-services-custom-vision/
-
-geen javascript download?
-
