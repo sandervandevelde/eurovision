@@ -13,6 +13,8 @@ namespace TriggeredImageTakerApp
 
             icamCamera = new IcamCamera();
 
+            icamCamera.SetLightRingColor(LightRingColor.Green);
+
             do
             {
                 Thread.Sleep(1000);
