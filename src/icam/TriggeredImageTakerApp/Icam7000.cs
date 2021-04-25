@@ -64,7 +64,7 @@ namespace TriggeredImageTakerApp
 
             //Step5: Register event listener for image ready event
 
-            camera.EvtDiInterrupt += new EventHandler<EvtDiSnapData>(DIInterruptListener);
+            camera.EvtDiInterrupt += new EventHandler<EvtDiSnapData>(DIInterruptEventHandler);
 
             Console.WriteLine($"DI event connected");
 
@@ -81,6 +81,9 @@ namespace TriggeredImageTakerApp
             // STEP 17
 
             ActivateDigitalInput(digitalInput);
+
+            // SVDV
+            AcquireImage();
         }
 
         private void ConfigureImageAcquisition(Camera camera)
@@ -321,7 +324,7 @@ namespace TriggeredImageTakerApp
             return bitmap;
         }
 
-        private void DIInterruptListener(object sender, EvtDiSnapData e)
+        private void DIInterruptEventHandler(object sender, EvtDiSnapData e)
         {
             Console.WriteLine("\nDI interrupt Processing:");
 
@@ -376,7 +379,33 @@ namespace TriggeredImageTakerApp
             //Console.WriteLine("buffer size = 0x{0:X} \n", evtimage.ImageSize);
 
             //Step13: Get the image buffer base address
-            byte[] byBuffer = evtimage.ImageBase;
+            //byte[] byBuffer = evtimage.ImageBase;
+
+            // ALTERNATIVE - START
+
+            int size = evtimage.ImageBase.Length;
+            byte[] byBuffer = new byte[size];
+
+            try
+            {
+                IntPtr unmanagedPointer = Marshal.AllocHGlobal(size);
+                Marshal.Copy(evtimage.ImageBase, 0, unmanagedPointer, size);
+                // Call unmanaged code
+
+                IntPtr memoryTarget = Marshal.AllocHGlobal(size);
+                CopyMemory(memoryTarget, unmanagedPointer, Convert.ToUInt32(size));
+
+                Marshal.Copy(memoryTarget, byBuffer, 0, size);
+
+                Marshal.FreeHGlobal(unmanagedPointer);
+                //     Marshal.FreeHGlobal(memoryTarget);
+            }
+            catch (EntryPointNotFoundException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            // ALTERNATIVE - END
 
             //avoid handing an empty bufer
             if (byBuffer != null && byBuffer.Length > 0)
@@ -441,5 +470,8 @@ namespace TriggeredImageTakerApp
             Console.WriteLine("Image taken");
             SetLightRingColor(LightRingColor.Green);
         }
+
+        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
+        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
     }
 }
