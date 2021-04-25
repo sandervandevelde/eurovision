@@ -386,24 +386,31 @@ namespace TriggeredImageTakerApp
             int size = 1228800;// evtimage.ImageBase.Length;
             byte[] byBuffer = new byte[size];
 
-            try
-            {
-                IntPtr unmanagedPointer = Marshal.AllocHGlobal(size);
-                Marshal.Copy(evtimage.ImageBase, 0, unmanagedPointer, size);
-                // Call unmanaged code
+            UnsafeHelper.Copy(evtimage.ImageBase, 0, byBuffer, size, 0);
 
-                IntPtr memoryTarget = Marshal.AllocHGlobal(size);
-                CopyMemory(memoryTarget, unmanagedPointer, Convert.ToUInt32(size));
+            //IntPtr unmanagedPointer = Marshal.AllocHGlobal(size);
+            //Marshal.Copy(evtimage.ImageBase, 0, unmanagedPointer, size);
 
-                Marshal.Copy(memoryTarget, byBuffer, 0, size);
+            //System.Runtime.InteropServices.Marshal.Copy(unmanagedPointer, byteArray, 0, size);
 
-                Marshal.FreeHGlobal(unmanagedPointer);
-                //     Marshal.FreeHGlobal(memoryTarget);
-            }
-            catch (EntryPointNotFoundException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            //try
+            //{
+            //    IntPtr unmanagedPointer = Marshal.AllocHGlobal(size);
+            //    Marshal.Copy(evtimage.ImageBase, 0, unmanagedPointer, size);
+            //    // Call unmanaged code
+
+            //    IntPtr memoryTarget = Marshal.AllocHGlobal(size);
+            //    CopyMemory(memoryTarget, unmanagedPointer, Convert.ToUInt32(size));
+
+            //    Marshal.Copy(memoryTarget, byBuffer, 0, size);
+
+            //    Marshal.FreeHGlobal(unmanagedPointer);
+            //    //     Marshal.FreeHGlobal(memoryTarget);
+            //}
+            //catch (EntryPointNotFoundException e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //}
 
             // ALTERNATIVE - END
 
