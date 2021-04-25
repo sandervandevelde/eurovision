@@ -5,13 +5,13 @@ namespace TriggeredImageTakerApp
 {
     internal partial class Program
     {
-        private static IcamCamera icamCamera;
-
         private static void Main(string[] args)
         {
             Console.WriteLine("Hello Triggered Image Maker!");
 
-            icamCamera = new IcamCamera();
+            var icamCamera = new IcamCamera();
+
+            Console.WriteLine("Ready for action!");
 
             icamCamera.SetLightRingColor(LightRingColor.Green);
 
