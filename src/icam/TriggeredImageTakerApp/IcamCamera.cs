@@ -13,6 +13,8 @@ namespace TriggeredImageTakerApp
 
         private CameraManager _camManager;
 
+        //        private LightRingColor _lastColor;
+
         public IcamCamera()
         {
             //Step1: Create a CameraManager object to manage all cameras
