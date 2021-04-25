@@ -9,11 +9,11 @@ namespace TriggeredImageTakerApp
         {
             Console.WriteLine("Hello Triggered Image Maker!");
 
-            var icamCamera = new IcamCamera();
-
-            Console.WriteLine("Ready for action!");
+            var icamCamera = new Icam7000();
 
             icamCamera.SetLightRingColor(LightRingColor.Green);
+
+            Console.WriteLine("Ready for action!");
 
             do
             {

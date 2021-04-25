@@ -1,9 +1,12 @@
 ﻿using System;
 using CamNaviCtrl;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace TriggeredImageTakerApp
 {
-    public class IcamCamera
+    public class Icam7000
     {
         private NodeBool _counterDoRed = null;
 
@@ -13,9 +16,7 @@ namespace TriggeredImageTakerApp
 
         private CameraManager _camManager;
 
-        //        private LightRingColor _lastColor;
-
-        public IcamCamera()
+        public Icam7000()
         {
             //Step1: Create a CameraManager object to manage all cameras
 
@@ -43,13 +44,15 @@ namespace TriggeredImageTakerApp
 
             Console.WriteLine($"Camera connected");
 
+            ConfigureLedRing(camera);
+
+            SetLightRingColor(LightRingColor.Orange);
+
             //Step5: Register event listener for image ready event
 
             camera.EvtDiInterrupt += new EventHandler<EvtDiSnapData>(DIInterruptListener);
 
             Console.WriteLine($"DI event connected");
-
-            ConfigureLedRing(camera);
 
             // STEP 6-9
 
@@ -250,6 +253,26 @@ namespace TriggeredImageTakerApp
             _LedGpo.SetValue(true); // put led on
 
             Console.WriteLine($"Ring light {lightRingColor} ({(int)lightRingColor}) activated");
+        }
+
+        private Bitmap CreateGrayBitmap(byte[] rawBytes, int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+
+            Console.WriteLine("rawBytes.Length = 0x{0:X} or {1}\n", rawBytes.Length, rawBytes.Length);
+
+            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height),
+                                            ImageLockMode.WriteOnly, bitmap.PixelFormat);
+
+            Marshal.Copy(rawBytes, 0, bitmapData.Scan0, (width * height));
+            bitmap.UnlockBits(bitmapData);
+
+            //create a 256B grayscale palette.
+            var pal = bitmap.Palette;
+            for (int i = 0; i < 256; i++) pal.Entries[i] = Color.FromArgb(i, i, i);
+            bitmap.Palette = pal;
+
+            return bitmap;
         }
 
         private void DIInterruptListener(object sender, EvtDiSnapData e)
