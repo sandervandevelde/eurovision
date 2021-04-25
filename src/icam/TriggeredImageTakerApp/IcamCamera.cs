@@ -249,7 +249,7 @@ namespace TriggeredImageTakerApp
             _LedSelector.SetValue((int)lightRingColor); // 2 = orange
             _LedGpo.SetValue(true); // put led on
 
-            Console.WriteLine("Orange LED (2) activated");
+            Console.WriteLine($"Ring light {lightRingColor} ({(int)lightRingColor}) activated");
         }
 
         private void DIInterruptListener(object sender, EvtDiSnapData e)
@@ -271,12 +271,5 @@ namespace TriggeredImageTakerApp
                 _counterDoRed.SetValue(Convert.ToBoolean(e.GetState(1)));
             }
         }
-    }
-
-    public enum LightRingColor
-    {
-        Blue = 0,
-        Green = 1,
-        Orange = 2
     }
 }
