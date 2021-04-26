@@ -18,19 +18,19 @@ namespace TriggeredImagerNetFrwrkApp
 
         private CameraManager _camManager;
 
-        private Camera camera = null;
+        private Camera _camera = null;
 
-        private CameraConfigure camConfigure = null;
+        private CameraConfigure _camConfigure = null;
 
-        private int iAcq_Counter = 0;
+        private int _AcqCounter = 0;
 
-        private string today = string.Empty;
+        private string _today = string.Empty;
 
         public Icam7000()
         {
-            today = $"{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}";
+            _today = $"{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}";
 
-            Directory.CreateDirectory(@"C:\temp\" + today);
+            Directory.CreateDirectory(@"C:\temp\" + _today);
 
             //Step1: Create a CameraManager object to manage all cameras
 
@@ -53,30 +53,30 @@ namespace TriggeredImagerNetFrwrkApp
             Console.WriteLine($"Camera selected: {strCaneraID}");
 
             //Step4: Get the Camera object by using camera id
-            camera = _camManager.GetCamera(strCaneraID);
-            if (camera == null) { Console.WriteLine("ERROR: Invalid ICamera !!"); return; }
+            _camera = _camManager.GetCamera(strCaneraID);
+            if (_camera == null) { Console.WriteLine("ERROR: Invalid ICamera !!"); return; }
 
             Console.WriteLine($"Camera connected");
 
-            ConfigureLedRing(camera);
+            ConfigureLedRing(_camera);
 
             SetLightRingColor(LightRingColor.Orange);
 
             //Step5: Register event listener for image ready event
 
-            camera.EvtDiInterrupt += new EventHandler<EvtDiSnapData>(DIInterruptEventHandler);
+            _camera.EvtDiInterrupt += new EventHandler<EvtDiSnapData>(DIInterruptEventHandler);
 
             Console.WriteLine($"DI event connected");
 
             // STEP 6-9
 
-            var digitalInput = ConfigureDigitalInput(camera);
+            var digitalInput = ConfigureDigitalInput(_camera);
 
             // STEP 10-16
 
-            ConfigureDigitalOutput(camera);
+            ConfigureDigitalOutput(_camera);
 
-            ConfigureImageAcquisition(camera);
+            ConfigureImageAcquisition(_camera);
 
             // STEP 17
 
@@ -251,32 +251,32 @@ namespace TriggeredImagerNetFrwrkApp
         private void ConfigureLedRing(Camera camera)
         {
             //Step5: Get the CameraConfigure object for camera configuration
-            camConfigure = camera.GetCameraConfigure();
-            if (camConfigure == null)
+            _camConfigure = camera.GetCameraConfigure();
+            if (_camConfigure == null)
             {
                 Console.WriteLine("ERROR: Invalid ICamConfigure !!"); return;
             }
             else
             {
-                Console.WriteLine("camConfigure.Height and Width = {0} {1} \n", camConfigure.Height.Value, camConfigure.Width.Value);
+                Console.WriteLine("camConfigure.Height and Width = {0} {1} \n", _camConfigure.Height.Value, _camConfigure.Width.Value);
             }
 
             Console.WriteLine("Camera configuration available");
 
             //STEP 5.1: From Camera configuration: Leds
-            _LedSelector = camConfigure.GetEnumNode("LedSelector");
+            _LedSelector = _camConfigure.GetEnumNode("LedSelector");
             if (_LedSelector == null)
             {
                 Console.WriteLine("ERROR: Invalid LED Selector !!"); return;
             }
 
             // Mode 0: Continuous, 1: GPO, 2: Level Toggle, 3: Toggle
-            NodeEnum pLEDMode = camConfigure.GetEnumNode("LedMode");
+            NodeEnum pLEDMode = _camConfigure.GetEnumNode("LedMode");
 
             // cnl_set_int_value(pLEDMode, 3) in toggle mode
-            NodeBool pLEDToggle = camConfigure.GetBoolNode("LedToggleEnable");
-            NodeInt pLEDTogglePeriod = camConfigure.GetIntNode("LedToggleRate");
-            _LedGpo = camConfigure.GetBoolNode("LedGpo");
+            NodeBool pLEDToggle = _camConfigure.GetBoolNode("LedToggleEnable");
+            NodeInt pLEDTogglePeriod = _camConfigure.GetIntNode("LedToggleRate");
+            _LedGpo = _camConfigure.GetBoolNode("LedGpo");
 
             Console.WriteLine("Access to LED objects");
 
@@ -356,13 +356,21 @@ namespace TriggeredImagerNetFrwrkApp
             SetLightRingColor(LightRingColor.Blue);
 
             //Step9: Start Acquisition
-            camera.StartAcq(1); //for 1 shot in this case; the continuous snapshot speed depends on Camera settings.
-
-            // Step10: Do anything you are interesting while the device is working.
-            //int iAcq_Counter = 0;
+            _camera.StartAcq(1); //for 1 shot in this case; the continuous snapshot speed depends on Camera settings.
 
             //Step11: Get the image object with timeout (1000ms)
-            EvtImgData evtimage = camera.GetImage(1000);
+            EvtImgData evtimage = _camera.GetImage(1000);
+
+            EvtImgData evtimageFlush = _camera.GetImage(1000);
+
+            while (evtimageFlush != null)
+            {
+                Console.WriteLine("flush image");
+                evtimageFlush = _camera.GetImage(1000);
+                evtimageFlush.ReleaseImage();
+            }
+
+
             if (evtimage == null)
             {
                 Console.WriteLine("Null image or no more image. Press any key to leave this loop.\n");
@@ -373,25 +381,32 @@ namespace TriggeredImagerNetFrwrkApp
             }
             else
             {
-                iAcq_Counter++;
- //               Console.WriteLine("Got a new Image Data {0}\n", iAcq_Counter);
+                _AcqCounter++;
             }
 
             //Step12: Get the image buffer size. (not the real image size)
             //Console.WriteLine("buffer size = 0x{0:X} \n", evtimage.ImageSize);
 
+
             //Step13: Get the image buffer base address
             byte[] byBuffer = evtimage.ImageBase;
+
+            byte[] byBufferDummy = evtimage.ImageBase;
+            if (byBufferDummy != null && byBufferDummy.Length > 0)
+            {
+                Console.WriteLine("Flush byte buffer");
+                byBufferDummy = evtimage.ImageBase;
+            }
 
             //avoid handing an empty bufer
             if (byBuffer != null && byBuffer.Length > 0)
             {
-                int bmpWidth = (int)camConfigure.Width.Value;
-                int bmpHeight = (int)camConfigure.Height.Value;
+                int bmpWidth = (int)_camConfigure.Width.Value;
+                int bmpHeight = (int)_camConfigure.Height.Value;
                 Bitmap bitmap = null;
 
                 //Get and check image format and call proper convert functions.
-                long pixel_format = camConfigure.GetPixelFormat().Value;
+                long pixel_format = _camConfigure.GetPixelFormat().Value;
 
                 //MONO8 - one of iCam-7000 model
                 if (pixel_format == (long)GEV_PIXEL_FORMAT.MONO8)
@@ -407,11 +422,13 @@ namespace TriggeredImagerNetFrwrkApp
                     Console.WriteLine("Pixel format Not supported yet: 0x{0:X} \n", pixel_format);
                 }
 
+                byBuffer = null;
+
                 if (bitmap != null)
                 {
                     try
                     {
-                        string bmpfile = @"C:\temp\" + today + @"\" + Convert.ToString(iAcq_Counter) + ".bmp";
+                        string bmpfile = @"C:\temp\" + _today + @"\" + Convert.ToString(_AcqCounter) + ".bmp";
 
                         bitmap.Save(bmpfile, ImageFormat.Bmp);
 
@@ -423,17 +440,34 @@ namespace TriggeredImagerNetFrwrkApp
                     {
                         Console.WriteLine("There was a problem saving the file.\n");
                     }
+
+                    bitmap.Dispose();
+                    bitmap = null;
+                }
+                else
+                {
+                    Console.WriteLine("No bitmap extracted");
                 }
             }
+            else
+            {
+                Console.WriteLine("empty buffer");
+                byBuffer = null;
+            }
+
             //Step14: Release image buffer
             evtimage.ReleaseImage();
 
             //Step15: Stop the camera image acquisition function
-            if (camConfigure.AcquisitionStop == null) { Console.WriteLine("ERROR: Invalid AcquisitionStop node !!"); }
-            camConfigure.AcquisitionStop.Execute();
+            if (_camConfigure.AcquisitionStop == null) 
+            {
+                Console.WriteLine("ERROR: Invalid AcquisitionStop node !!"); 
+            }
+
+            _camConfigure.AcquisitionStop.Execute();
 
             //Step16: Stop Acquisition
-            camera.StopAcq();
+            _camera.StopAcq();
 
             SetLightRingColor(LightRingColor.Green);
         }
