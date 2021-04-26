@@ -108,8 +108,8 @@ namespace TriggeredImagerNetFrwrkApp
             //Console.WriteLine("camConfigure.GetPayloadSize = 0x{0:X} \n", camConfigure.GetPayloadSize().Value);
 
             //Step8: Start the camera image acquisition function
-            if (camConfigure.AcquisitionStart == null) { Console.WriteLine("ERROR: Invalid AcquisitionStart node !!"); return; }
-            camConfigure.AcquisitionStart.Execute();
+         //   if (camConfigure.AcquisitionStart == null) { Console.WriteLine("ERROR: Invalid AcquisitionStart node !!"); return; }
+         //   camConfigure.AcquisitionStart.Execute();
         }
 
         private void ActivateDigitalInput(DigitalInput digitalInput)
@@ -353,10 +353,14 @@ namespace TriggeredImagerNetFrwrkApp
 
         private void AcquireImage()
         {
+            _camConfigure.AcquisitionStart.Execute();
+
+
             SetLightRingColor(LightRingColor.Blue);
 
             //Step9: Start Acquisition
             _camera.StartAcq(1); //for 1 shot in this case; the continuous snapshot speed depends on Camera settings.
+            _camera.StartAcq(1);
 
             //Step11: Get the image object with timeout (1000ms)
             EvtImgData evtimage = _camera.GetImage(1000);
@@ -369,7 +373,6 @@ namespace TriggeredImagerNetFrwrkApp
                 evtimageFlush = _camera.GetImage(1000);
                 evtimageFlush.ReleaseImage();
             }
-
 
             if (evtimage == null)
             {
@@ -390,13 +393,16 @@ namespace TriggeredImagerNetFrwrkApp
 
             //Step13: Get the image buffer base address
             byte[] byBuffer = evtimage.ImageBase;
+            evtimage.ReleaseImage();
 
-            byte[] byBufferDummy = evtimage.ImageBase;
-            if (byBufferDummy != null && byBufferDummy.Length > 0)
-            {
-                Console.WriteLine("Flush byte buffer");
-                byBufferDummy = evtimage.ImageBase;
-            }
+
+            //byte[] byBufferDummy = evtimage.ImageBase;
+            //while (byBufferDummy != null && byBufferDummy.Length > 0)
+            //{
+            //    Console.WriteLine("Flush byte buffer");
+            //    byBufferDummy = evtimage.ImageBase;
+            //    evtimage.ReleaseImage();
+            //}
 
             //avoid handing an empty bufer
             if (byBuffer != null && byBuffer.Length > 0)
@@ -468,6 +474,8 @@ namespace TriggeredImagerNetFrwrkApp
 
             //Step16: Stop Acquisition
             _camera.StopAcq();
+
+            _camConfigure.AcquisitionStop.Execute();
 
             SetLightRingColor(LightRingColor.Green);
         }
