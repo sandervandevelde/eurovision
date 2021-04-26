@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using TriggeredImagerNetFrwrkApp;
 
 namespace DotNetFrmwrkMLClientApp
 {
@@ -16,38 +18,52 @@ namespace DotNetFrmwrkMLClientApp
 
             TestImage(@"C:\git\eurovision\2euro\Images\Head\k1.png");
 
-            Console.WriteLine("--------------- NEXT ---------------");
+            //Console.WriteLine("--------------- NEXT ---------------");
             //    TestImage(@"C:\git\eurovision\2euro\Images\Tail\m3.png");
 
-            Console.WriteLine("--------------- NEXT ---------------");
+            //Console.WriteLine("--------------- NEXT ---------------");
             //  TestImage(@"C:\git\eurovision\2euro\Images\Tail\m4.png");
 
-            Console.WriteLine("--------------- NEXT ---------------");
+            //Console.WriteLine("--------------- NEXT ---------------");
             //TestImage(@"C:\git\eurovision\2euro\Images\Tail\m5.png");
-            
-            Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261426\head.png");
+
+            //Console.WriteLine("--------------- NEXT ---------------");
+            //TestImage(@"C:\temp\20214261426\head.png");
 
 
-            Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261447\head1.png");
-            Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261447\head3.png");
+            //Console.WriteLine("--------------- NEXT ---------------");
+            //TestImage(@"C:\temp\20214261447\head1.png");
+            //Console.WriteLine("--------------- NEXT ---------------");
+            //TestImage(@"C:\temp\20214261447\head3.png");
 
-            
 
-            Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261438\tail.png");
-            Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261438\2.png");
-            Console.WriteLine("--------------- NEXT ---------------");
+
+            //Console.WriteLine("--------------- NEXT ---------------");
+            //TestImage(@"C:\temp\20214261438\tail.png");
+            //Console.WriteLine("--------------- NEXT ---------------");
+            //TestImage(@"C:\temp\20214261438\2.png");
+            //Console.WriteLine("--------------- NEXT ---------------");
             TestImage(@"C:\temp\20214261438\3.png");
 
             /////////////////////////////////////////////
 
-            Console.WriteLine(" =============== End of process, hit any key to finish ===============");
-            Console.ReadKey();
+
+            Console.WriteLine("Hello Triggered Image Maker!");
+
+            var icamCamera = new Icam7000();
+
+            icamCamera.SetLightRingColor(LightRingColor.Green);
+
+            Console.WriteLine("Ready for action!");
+
+            do
+            {
+                Thread.Sleep(1000);
+
+            }
+            while (!Console.KeyAvailable);
         }
+
         private static void TestImage(string fileName)
         {
             var sw = new Stopwatch();

@@ -154,6 +154,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GEV_PIXEL_FORMAT.cs" />
+    <Compile Include="Icam7000.cs" />
+    <Compile Include="LightRingColor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
