@@ -7,7 +7,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8738CE35-7CC9-4989-910D-B60B22A997AA}</ProjectGuid>
+    <ProjectGuid>{36D06034-95DB-44CE-A8B5-23EDC3FDD66E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DotNetFrmwrkMLClientApp</RootNamespace>
     <AssemblyName>DotNetFrmwrkMLClientApp</AssemblyName>
@@ -58,6 +58,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CamNaviCtrl">
+      <HintPath>..\..\..\..\..\..\Advantech\CamNavi\SDK\net45\CamNaviCtrl.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Protobuf, Version=3.10.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.10.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
@@ -162,10 +165,6 @@
     <ProjectReference Include="..\MLNetTestAppML.Model\MLNetTestAppML.Model.csproj">
       <Project>{65aec6ac-afc4-4a8f-b897-26d8f510c7d4}</Project>
       <Name>MLNetTestAppML.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TriggeredImagerNetFrwrkApp\TriggeredImagerNetFrwrkApp.csproj">
-      <Project>{82674699-f348-45dc-846e-7070946fac9c}</Project>
-      <Name>TriggeredImagerNetFrwrkApp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
