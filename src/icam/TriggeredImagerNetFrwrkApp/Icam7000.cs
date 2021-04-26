@@ -434,9 +434,9 @@ namespace TriggeredImagerNetFrwrkApp
                 {
                     try
                     {
-                        string bmpfile = @"C:\temp\" + _today + @"\" + Convert.ToString(_AcqCounter) + ".bmp";
+                        string bmpfile = @"C:\temp\" + _today + @"\" + Convert.ToString(_AcqCounter) + ".png";
 
-                        bitmap.Save(bmpfile, ImageFormat.Bmp);
+                        bitmap.Save(bmpfile, ImageFormat.Png); // was BMP
 
                         Console.WriteLine($"Save {bmpfile}");
 
