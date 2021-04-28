@@ -16,7 +16,7 @@ namespace DotNetFrmwrkMLClientApp
         {
             Console.WriteLine("Start on .Net Framework app");
 
-            TestImage(@"C:\git\eurovision\2euro\Images\Head\k1.png");
+            //TestImage(@"C:\git\eurovision\2euro\Images\Head\k1.png");
 
             //Console.WriteLine("--------------- NEXT ---------------");
             //    TestImage(@"C:\git\eurovision\2euro\Images\Tail\m3.png");
@@ -43,14 +43,16 @@ namespace DotNetFrmwrkMLClientApp
             //Console.WriteLine("--------------- NEXT ---------------");
             //TestImage(@"C:\temp\20214261438\2.png");
             //Console.WriteLine("--------------- NEXT ---------------");
-            TestImage(@"C:\temp\20214261438\3.png");
+            //TestImage(@"C:\temp\20214261438\3.png");
 
             /////////////////////////////////////////////
 
 
             Console.WriteLine("Hello Triggered Image Maker!");
 
-            var icamCamera = new Icam7000();
+            var icamCamera = new Icam7000(@"c:\temp");
+
+            icamCamera.ImageTaken += IcamCamera_ImageTaken;
 
             icamCamera.SetLightRingColor(LightRingColor.Green);
 
@@ -59,9 +61,13 @@ namespace DotNetFrmwrkMLClientApp
             do
             {
                 Thread.Sleep(1000);
-
             }
             while (!Console.KeyAvailable);
+        }
+
+        private static void IcamCamera_ImageTaken(object sender, string imageName)
+        {
+            TestImage(imageName);
         }
 
         private static void TestImage(string fileName)

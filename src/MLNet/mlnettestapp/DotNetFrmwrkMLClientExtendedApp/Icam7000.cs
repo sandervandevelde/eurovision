@@ -24,13 +24,17 @@ namespace TriggeredImagerNetFrwrkApp
 
         private int _AcqCounter = 0;
 
-        private string _today = string.Empty;
+        public string TargetFolder { get; private set; }
 
-        public Icam7000()
+        public event EventHandler<string> ImageTaken;
+
+        public Icam7000(string targetFolder)
         {
-            _today = $"{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}";
+            var today = $"{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}";
 
-            Directory.CreateDirectory(@"C:\temp\" + _today);
+            TargetFolder = Path.Combine(targetFolder, today);
+
+            Directory.CreateDirectory(TargetFolder);
 
             //Step1: Create a CameraManager object to manage all cameras
 
@@ -434,13 +438,16 @@ namespace TriggeredImagerNetFrwrkApp
                 {
                     try
                     {
-                        string bmpfile = @"C:\temp\" + _today + @"\" + Convert.ToString(_AcqCounter) + ".png";
+                        string bmpfile = Path.Combine(TargetFolder, Convert.ToString(_AcqCounter) + ".png");
 
-                        bitmap.Save(bmpfile, ImageFormat.Png); // was BMP
+                        bitmap.Save(bmpfile, ImageFormat.Png); 
 
                         Console.WriteLine($"Save {bmpfile}");
 
-                        //bitmap.Save(@"D:\a.bmp", System.Drawing.Imaging.ImageFormat.Png);
+                        if (ImageTaken!= null)
+                        {
+                            ImageTaken(this, bmpfile);
+                        }
                     }
                     catch (Exception)
                     {
