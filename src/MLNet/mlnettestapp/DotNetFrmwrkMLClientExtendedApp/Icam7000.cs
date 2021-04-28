@@ -10,6 +10,8 @@ namespace TriggeredImagerNetFrwrkApp
 {
     public class Icam7000
     {
+        private NodeBool _counterDoGray = null;
+
         private NodeBool _counterDoRed = null;
 
         private NodeBool _LedGpo = null;
@@ -27,7 +29,7 @@ namespace TriggeredImagerNetFrwrkApp
         public string TargetFolder { get; private set; }
 
         public event EventHandler<string> ImageTaken;
-
+        
         public Icam7000(string targetFolder)
         {
             var today = $"{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}";
@@ -78,7 +80,9 @@ namespace TriggeredImagerNetFrwrkApp
 
             // STEP 10-16
 
-            ConfigureDigitalOutput(_camera);
+            ConfigureDigitalOutputRed(_camera);
+
+            ConfigureDigitalOutputGray(_camera);
 
             ConfigureImageAcquisition(_camera);
 
@@ -141,7 +145,80 @@ namespace TriggeredImagerNetFrwrkApp
             //Step17-4 DI Interrupt: Verify the DI interrupt function.
         }
 
-        private void ConfigureDigitalOutput(Camera camera)
+        private void ConfigureDigitalOutputGray(Camera camera)
+        {
+            //Step10: Get the DO Counter object
+
+
+            Counter counterDoGray = camera.GetCounter(1); // 2 = Red(DI1)  // 1 = Grey(DI0)
+
+            if (counterDoGray == null) { Console.WriteLine("ERROR: Invalid counter !!"); return; }
+
+            Console.WriteLine($"DO counter 1 (gray) selected");
+
+            //Step11: Configure Counter Mode
+
+            NodeEnum cntMode = counterDoGray.GetMode();
+
+            if (cntMode == null) { Console.WriteLine("ERROR: Invalid cntMode !!"); return; }
+
+            cntMode.Value = 1;
+            Int64 CntModeValue = cntMode.Value;
+
+            //Step12: Configure Counter Invert
+
+            NodeEnum cntInvert = counterDoGray.GetInvert();
+            if (cntInvert == null) { Console.WriteLine("ERROR: Invalid cntInvert !!"); return; }
+
+            cntInvert.Value = 0; //  1 = DO is standaard gesloten ; 0 = DO is standaard open
+            Int64 CntInvertValue = cntInvert.Value;
+
+            Console.WriteLine($"DO = (0) standard open");
+
+            //Step13: Configure DO Trigger Edge
+
+            NodeEnum cntTriggerEdge = counterDoGray.GetTriggerEdge();
+            if (cntTriggerEdge == null) { Console.WriteLine("ERROR: Invalid cntTriggerEdge !!"); return; }
+
+            cntTriggerEdge.Value = 1;
+            Int64 CntTriggerEdgeValue = cntTriggerEdge.Value;
+
+            //Step14: Configure DO Delay
+
+            NodeInt cntDelay = counterDoGray.GetDelay();
+            if (cntDelay == null) { Console.WriteLine("ERROR: Invalid cntDelay !!"); return; }
+
+            cntDelay.Value = 1;
+            Int64 DelayValue = cntDelay.Value;
+            Int64 DelayMax = cntDelay.Max;
+            Int64 DelayMin = cntDelay.Min;
+
+            //Step15: Configure DO Pulse Width
+
+            NodeInt cntPulseWidth = counterDoGray.GetPulseWidth();
+            if (cntPulseWidth == null) { Console.WriteLine("ERROR: Invalid DoPulseWidth !!"); return; }
+
+            cntPulseWidth.Value = 1;
+            Int64 PulseWidthValue = cntPulseWidth.Value;
+            Int64 PulseWidthMax = cntPulseWidth.Max;
+            Int64 PulseWidthMin = cntPulseWidth.Min;
+
+            //Step16: Configure DO Output
+
+            _counterDoGray = counterDoGray.GetOutputValue();
+            if (_counterDoGray == null) { Console.WriteLine("ERROR: Invalid DoOutput !!"); return; }
+
+            bool CntOutputValue = _counterDoGray.Value;
+
+            // standaard gesloten indien invert 1 is -> true = verbroken ; FALSE = do nothing
+            // standaard verbroken indien invert 0 is => true = sluiten ; FALSE = do nothing
+
+            _counterDoGray.SetValue(false);
+        }
+
+
+
+        private void ConfigureDigitalOutputRed(Camera camera)
         {
             //Step10: Get the DO Counter object
 
@@ -149,7 +226,7 @@ namespace TriggeredImagerNetFrwrkApp
 
             if (counterDoRed == null) { Console.WriteLine("ERROR: Invalid counter !!"); return; }
 
-            Console.WriteLine($"DO counter 2 (gray) selected");
+            Console.WriteLine($"DO counter 2 (RED) selected");
 
             //Step11: Configure Counter Mode
 
@@ -337,8 +414,6 @@ namespace TriggeredImagerNetFrwrkApp
 
             //Console.WriteLine($"TriggerEdge = [{e.GetTriggerEdge(1)}]");
 
-            ToggleDigitalOutRed(e.GetState(1));
-
             if (e.GetState(1) == 1)
             {
                 Console.WriteLine("------------> DI Interrupt is found");
@@ -347,11 +422,24 @@ namespace TriggeredImagerNetFrwrkApp
             }
         }
 
-        private void ToggleDigitalOutRed(uint active)
+        /// <summary>
+        /// 0 : both out
+        /// 1 : activate RED
+        /// 2 : activate GRAY
+        /// </summary>
+        /// <param name="value"></param>
+        public void ToggleDigitalOut(uint value)
         {
             if (_counterDoRed != null)
             {
-                _counterDoRed.SetValue(Convert.ToBoolean(active));
+                var toggleRed = value == 1 ? 1 : 0;
+                _counterDoRed.SetValue(Convert.ToBoolean(toggleRed));
+            }
+            
+            if (_counterDoGray != null)
+            {
+                var toggleGray = value == 2 ? 1 : 0;
+                _counterDoGray.SetValue(Convert.ToBoolean(toggleGray));
             }
         }
 
@@ -485,6 +573,9 @@ namespace TriggeredImagerNetFrwrkApp
             _camConfigure.AcquisitionStop.Execute();
 
             SetLightRingColor(LightRingColor.Green);
+
+            Console.WriteLine();
+            Console.WriteLine();
         }
     }
 }
